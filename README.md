@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-An ultra-lightweight, zero-dependency Windows **on-screen custom button** utility. Primarily designed to solve the pain point of **tiny, hard-to-tap UI buttons and awkward keyboard shortcuts when using a tablet over Remote Desktop** — place customizable, always-on-top square buttons anywhere on your screen to trigger shortcuts or anchored screen clicks **without stealing focus** from the active window.
+An ultra-lightweight (~97 KB), zero-dependency Windows **on-screen macro keyboard & custom floating button** utility. Primarily designed to solve the pain point of **tiny, hard-to-tap UI buttons and awkward keyboard shortcuts when using a tablet over Remote Desktop** — place customizable, always-on-top virtual buttons anywhere on your screen to trigger shortcuts or anchored screen clicks **without stealing focus** from the active window.
 
 ## Screenshots
 
