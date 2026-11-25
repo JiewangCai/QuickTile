@@ -35,7 +35,7 @@
   - 跨多显示器半透明准星拾取物理屏幕像素坐标；
   - 点击前先发送虚拟桌面硬件移动（`MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK`），再执行点击；
   - 支持左键单击 / 左键双击 / 右键单击、自定义点击按住时长（`0–30000 ms`）与点击后光标归位。
-- **绝对轻量**：纯 .NET Framework 4.x WinForms + Win32 P/Invoke 单文件绿色可执行程序（`dist\QuickTile.exe`，约 `91.5 KB`），零第三方依赖。
+- **绝对轻量**：纯 .NET Framework 4.x WinForms + Win32 P/Invoke 单文件绿色可执行程序（`dist\QuickTile.exe`，约 `97 KB`），内置 **中文 / English** 双语界面切换，零第三方依赖。
 
 ## 编译构建
 

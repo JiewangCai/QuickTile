@@ -35,7 +35,7 @@ An ultra-lightweight, zero-dependency Windows **on-screen custom button** utilit
   - Multi-monitor translucent crosshair picker for physical pixel coordinates;
   - Emits a virtual-desktop hardware move (`MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK`) before clicking;
   - Supports Left Click, Double Click, Right Click, configurable hold duration (`0–30000 ms`), and optional cursor position restoration.
-- **Single-File Lightweight Build**: Pure .NET Framework 4.x WinForms + Win32 P/Invoke (`dist\QuickTile.exe`, ~91.5 KB) with zero external dependencies.
+- **Single-File Lightweight Build**: Pure .NET Framework 4.x WinForms + Win32 P/Invoke (`dist\QuickTile.exe`, ~97 KB) with bilingual UI (**中文 / English**) and zero external dependencies.
 
 ## Build
 

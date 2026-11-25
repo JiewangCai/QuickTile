@@ -400,6 +400,12 @@ namespace QuickTile
             CheckEqualString(subTile.GetSubtitle(), "左键 120,340 (1500ms)", "GetSubtitle AnchorClick 1500ms shows (1500ms)");
             subTile.ClickHoldMs = 2000;
             CheckEqualString(subTile.GetSubtitle(), "左键 120,340 (2s)", "GetSubtitle AnchorClick 2000ms shows (2s)");
+
+            Lang.SetLanguage("en");
+            Check(Lang.IsEnglish && string.Equals(Lang.CurrentCode, "en", StringComparison.Ordinal), "Lang.SetLanguage('en') switches to English", "failed");
+            CheckEqualString(subTile.GetSubtitle(), "Left 120,340 (2s)", "GetSubtitle AnchorClick English shows Left");
+            Lang.SetLanguage("zh");
+            Check(!Lang.IsEnglish && string.Equals(Lang.CurrentCode, "zh", StringComparison.Ordinal), "Lang.SetLanguage('zh') switches back to Chinese", "failed");
         }
 
         private static void AssertMouseEvent(NativeMethods.INPUT ev, uint expectedFlags, string label)
@@ -514,6 +520,7 @@ namespace QuickTile
                 cfg.AlwaysOnTop = false;
                 cfg.LockPosition = true;
                 cfg.LockSize = true;
+                cfg.Language = "en";
                 cfg.ActiveProfileId = "profile-work";
 
                 TileProfile p1 = new TileProfile();
@@ -567,6 +574,7 @@ namespace QuickTile
                     Check(!loaded.AlwaysOnTop, "Loaded AlwaysOnTop == false", "expected false");
                     Check(loaded.LockPosition, "Loaded LockPosition == true", "expected true");
                     Check(loaded.LockSize, "Loaded LockSize == true", "expected true");
+                    CheckEqualString(loaded.Language, "en", "Loaded Language == 'en'");
                     CheckEqualString(loaded.ActiveProfileId, "profile-work", "Loaded ActiveProfileId == 'profile-work'");
                     Check(loaded.Tiles == null, "Normalized AppConfig.Tiles cleared to null", "not null");
                     CheckEqualInt(loaded.Profiles.Count, 2, "Loaded Profiles.Count == 2");

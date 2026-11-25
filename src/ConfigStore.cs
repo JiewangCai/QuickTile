@@ -35,7 +35,7 @@ namespace QuickTile
             int y = wa.Top + Math.Max(20, (wa.Height - size) / 2);
 
             return CreateHotkeyTile(
-                "方块 1",
+                Lang.T("方块 1", "Tile 1"),
                 x,
                 y,
                 size,
@@ -50,12 +50,13 @@ namespace QuickTile
             config.AlwaysOnTop = true;
             config.LockPosition = false;
             config.LockSize = false;
+            config.Language = Lang.CurrentCode;
             config.ActiveProfileId = "default";
             config.Tiles = null;
 
             TileProfile defProfile = new TileProfile();
             defProfile.Id = "default";
-            defProfile.Name = "默认方案";
+            defProfile.Name = Lang.T("默认方案", "Default");
 
             Rectangle wa = Screen.PrimaryScreen != null
                 ? Screen.PrimaryScreen.WorkingArea
@@ -68,7 +69,7 @@ namespace QuickTile
             int startY = wa.Top + Math.Max(20, (wa.Height - totalHeight) / 2);
 
             defProfile.Tiles.Add(CreateHotkeyTile(
-                "复制",
+                Lang.T("复制", "Copy"),
                 x,
                 startY + 0 * (size + gap),
                 size,
@@ -77,7 +78,7 @@ namespace QuickTile
                 (int)Keys.C));
 
             defProfile.Tiles.Add(CreateHotkeyTile(
-                "粘贴",
+                Lang.T("粘贴", "Paste"),
                 x,
                 startY + 1 * (size + gap),
                 size,
@@ -86,7 +87,7 @@ namespace QuickTile
                 (int)Keys.V));
 
             defProfile.Tiles.Add(CreateHotkeyTile(
-                "撤销",
+                Lang.T("撤销", "Undo"),
                 x,
                 startY + 2 * (size + gap),
                 size,
@@ -95,7 +96,7 @@ namespace QuickTile
                 (int)Keys.Z));
 
             defProfile.Tiles.Add(CreateHotkeyTile(
-                "截图",
+                Lang.T("截图", "Snip"),
                 x,
                 startY + 3 * (size + gap),
                 size,
@@ -243,6 +244,27 @@ namespace QuickTile
 
         private static void NormalizeConfig(AppConfig config)
         {
+            if (config.Language != null)
+            {
+                string trimmedLang = config.Language.Trim().ToLowerInvariant();
+                if (trimmedLang == "en" || trimmedLang.StartsWith("en-"))
+                {
+                    config.Language = "en";
+                }
+                else if (trimmedLang == "zh" || trimmedLang.StartsWith("zh-"))
+                {
+                    config.Language = "zh";
+                }
+                else
+                {
+                    config.Language = string.Empty;
+                }
+            }
+            else
+            {
+                config.Language = string.Empty;
+            }
+
             if (config.Profiles == null)
             {
                 config.Profiles = new List<TileProfile>();
@@ -252,7 +274,7 @@ namespace QuickTile
             {
                 TileProfile migrated = new TileProfile();
                 migrated.Id = "default";
-                migrated.Name = "默认方案";
+                migrated.Name = Lang.T("默认方案", "Default");
 
                 if (config.Tiles != null && config.Tiles.Count > 0)
                 {
@@ -286,7 +308,7 @@ namespace QuickTile
                 }
                 if (string.IsNullOrWhiteSpace(profile.Name))
                 {
-                    profile.Name = string.Format("方案 {0}", cleanedProfiles.Count + 1);
+                    profile.Name = string.Format(Lang.T("方案 {0}", "Profile {0}"), cleanedProfiles.Count + 1);
                 }
                 if (profile.Tiles == null)
                 {

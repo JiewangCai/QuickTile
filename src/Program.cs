@@ -24,6 +24,7 @@ namespace QuickTile
                 try
                 {
                     AppConfig config = ConfigStore.Load();
+                    Lang.SetLanguage(config.Language);
                     using (TileManager manager = new TileManager(config))
                     {
                         Application.Run(manager);

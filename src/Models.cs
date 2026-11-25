@@ -125,7 +125,7 @@ namespace QuickTile
         {
             TilePaletteItem preset = TilePalettes.Presets[0];
             Id = Guid.NewGuid().ToString("N");
-            Label = "新方块";
+            Label = Lang.T("新方块", "New Tile");
             X = 100;
             Y = 100;
             Size = 68;
@@ -229,14 +229,14 @@ namespace QuickTile
         {
             if (Action == ActionType.AnchorClick)
             {
-                string prefix = "左键";
+                string prefix = Lang.T("左键", "Left");
                 if (ClickType == MouseClickType.DoubleClick)
                 {
-                    prefix = "双击";
+                    prefix = Lang.T("双击", "Dbl");
                 }
                 else if (ClickType == MouseClickType.RightClick)
                 {
-                    prefix = "右键";
+                    prefix = Lang.T("右键", "Right");
                 }
                 string baseText = string.Format("{0} {1},{2}", prefix, AnchorX, AnchorY);
                 int holdMs = ClampClickHoldMs(ClickHoldMs);
@@ -333,7 +333,7 @@ namespace QuickTile
         private void InitDefaults()
         {
             Id = Guid.NewGuid().ToString("N");
-            Name = "默认方案";
+            Name = Lang.T("默认方案", "Default");
             Tiles = new List<TileConfig>();
         }
     }
@@ -349,6 +349,9 @@ namespace QuickTile
 
         [DataMember]
         public bool LockSize { get; set; }
+
+        [DataMember]
+        public string Language { get; set; }
 
         [DataMember]
         public string ActiveProfileId { get; set; }
@@ -376,6 +379,7 @@ namespace QuickTile
             AlwaysOnTop = true;
             LockPosition = false;
             LockSize = false;
+            Language = string.Empty;
             ActiveProfileId = string.Empty;
             Profiles = new List<TileProfile>();
             Tiles = null;

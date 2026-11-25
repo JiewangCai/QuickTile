@@ -15,8 +15,10 @@ namespace QuickTile
         private readonly Icon _appIcon;
         private readonly NotifyIcon _notifyIcon;
         private readonly ContextMenuStrip _trayMenu;
+        private readonly ToolStripMenuItem _miTraySettings;
         private readonly ToolStripMenuItem _miTrayLockSize;
         private readonly ToolStripMenuItem _miTrayLockPos;
+        private readonly ToolStripMenuItem _miTrayExit;
         private readonly Timer _topMostTimer;
         private readonly Timer _saveTimer;
 
@@ -27,6 +29,7 @@ namespace QuickTile
         public TileManager(AppConfig config)
         {
             _config = config ?? ConfigStore.CreateDefaultConfig();
+            Lang.SetLanguage(_config.Language);
             if (_config.Profiles == null || _config.Profiles.Count == 0)
             {
                 AppConfig fallback = ConfigStore.CreateDefaultConfig();
@@ -39,23 +42,23 @@ namespace QuickTile
 
             _trayMenu = new ContextMenuStrip();
 
-            ToolStripMenuItem miSettings = new ToolStripMenuItem("设置");
-            miSettings.Font = new Font(miSettings.Font, FontStyle.Bold);
-            miSettings.Click += delegate { ShowManagerForm(null); };
+            _miTraySettings = new ToolStripMenuItem(Lang.T("设置", "Settings"));
+            _miTraySettings.Font = new Font(_miTraySettings.Font, FontStyle.Bold);
+            _miTraySettings.Click += delegate { ShowManagerForm(null); };
 
-            _miTrayLockSize = new ToolStripMenuItem("锁定大小");
+            _miTrayLockSize = new ToolStripMenuItem(Lang.T("锁定大小", "Lock Size"));
             _miTrayLockSize.Click += delegate { SetLockSize(!_config.LockSize); };
 
-            _miTrayLockPos = new ToolStripMenuItem("锁定位置");
+            _miTrayLockPos = new ToolStripMenuItem(Lang.T("锁定位置", "Lock Position"));
             _miTrayLockPos.Click += delegate { SetLockPosition(!_config.LockPosition); };
 
-            ToolStripMenuItem miExit = new ToolStripMenuItem("退出程序");
-            miExit.Click += delegate { ExitApplication(); };
+            _miTrayExit = new ToolStripMenuItem(Lang.T("退出程序", "Exit"));
+            _miTrayExit.Click += delegate { ExitApplication(); };
 
-            _trayMenu.Items.Add(miSettings);
+            _trayMenu.Items.Add(_miTraySettings);
             _trayMenu.Items.Add(_miTrayLockSize);
             _trayMenu.Items.Add(_miTrayLockPos);
-            _trayMenu.Items.Add(miExit);
+            _trayMenu.Items.Add(_miTrayExit);
             _trayMenu.Opening += delegate { SyncTrayMenuChecks(); };
 
             _notifyIcon = new NotifyIcon();
@@ -243,6 +246,41 @@ namespace QuickTile
             RefreshManagerIfCreated(null);
         }
 
+        public void SetLanguage(string langCode)
+        {
+            string normalized = string.Equals(langCode, "en", StringComparison.OrdinalIgnoreCase) ? "en" : "zh";
+            if (string.Equals(_config.Language, normalized, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(Lang.CurrentCode, normalized, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            _config.Language = normalized;
+            Lang.SetLanguage(normalized);
+
+            _miTraySettings.Text = Lang.T("设置", "Settings");
+            _miTrayLockSize.Text = Lang.T("锁定大小", "Lock Size");
+            _miTrayLockPos.Text = Lang.T("锁定位置", "Lock Position");
+            _miTrayExit.Text = Lang.T("退出程序", "Exit");
+
+            for (int i = 0; i < _tileForms.Count; i++)
+            {
+                TileForm form = _tileForms[i];
+                if (form != null && !form.IsDisposed)
+                {
+                    form.RefreshLanguage();
+                }
+            }
+
+            if (_managerForm != null && !_managerForm.IsDisposed)
+            {
+                _managerForm.ApplyLanguage();
+                _managerForm.RefreshTiles(_config, null);
+            }
+
+            SaveConfigImmediate();
+        }
+
         public void SwitchProfile(string profileId)
         {
             TileProfile target = FindProfile(profileId);
@@ -275,11 +313,11 @@ namespace QuickTile
             }
 
             int num = _config.Profiles.Count + 1;
-            string name = string.Format("方案 {0}", num);
+            string name = string.Format(Lang.T("方案 {0}", "Profile {0}"), num);
             while (ProfileNameExists(name))
             {
                 num++;
-                name = string.Format("方案 {0}", num);
+                name = string.Format(Lang.T("方案 {0}", "Profile {0}"), num);
             }
 
             TileProfile profile = new TileProfile();
@@ -501,7 +539,7 @@ namespace QuickTile
         private static TileConfig CreateNewTileTemplate(List<TileConfig> activeTiles)
         {
             TileConfig tile = new TileConfig();
-            tile.Label = "新方块";
+            tile.Label = Lang.T("新方块", "New Tile");
             tile.ModLCtrl = true;
             tile.SyncLegacyModifiers();
             tile.VirtualKey = (int)Keys.C;

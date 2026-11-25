@@ -388,7 +388,7 @@ namespace QuickTile
         {
             if (vk <= 0)
             {
-                return "(无)";
+                return Lang.T("(无)", "(None)");
             }
 
             if (vk >= 0x41 && vk <= 0x5A)
@@ -521,7 +521,7 @@ namespace QuickTile
             }
             if (parts.Count == 0)
             {
-                return "未设置";
+                return Lang.T("未设置", "Not Set");
             }
             return string.Join("+", parts.ToArray());
         }
@@ -529,7 +529,7 @@ namespace QuickTile
         public static List<KeyValuePair<int, string>> GetSupportedKeys()
         {
             List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>();
-            list.Add(new KeyValuePair<int, string>(0, "(无)"));
+            list.Add(new KeyValuePair<int, string>(0, Lang.T("(无)", "(None)")));
 
             int vk;
             for (vk = 0x41; vk <= 0x5A; vk++)

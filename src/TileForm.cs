@@ -31,8 +31,10 @@ namespace QuickTile
 
         private readonly Timer _flashTimer;
         private readonly ContextMenuStrip _contextMenu;
+        private readonly ToolStripMenuItem _miSettings;
         private readonly ToolStripMenuItem _miLockSize;
         private readonly ToolStripMenuItem _miLockPosition;
+        private readonly ToolStripMenuItem _miExit;
 
         public event EventHandler TileChanged;
         public event EventHandler TileGeometryLiveChanged;
@@ -78,23 +80,23 @@ namespace QuickTile
 
             _contextMenu = new ContextMenuStrip();
 
-            ToolStripMenuItem miSettings = new ToolStripMenuItem("设置");
-            miSettings.Font = new Font(miSettings.Font, FontStyle.Bold);
-            miSettings.Click += delegate { RaiseEvent(OpenSettingsRequested); };
+            _miSettings = new ToolStripMenuItem(Lang.T("设置", "Settings"));
+            _miSettings.Font = new Font(_miSettings.Font, FontStyle.Bold);
+            _miSettings.Click += delegate { RaiseEvent(OpenSettingsRequested); };
 
-            _miLockSize = new ToolStripMenuItem("锁定大小");
+            _miLockSize = new ToolStripMenuItem(Lang.T("锁定大小", "Lock Size"));
             _miLockSize.Click += delegate { RaiseEvent(ToggleLockSizeRequested); };
 
-            _miLockPosition = new ToolStripMenuItem("锁定位置");
+            _miLockPosition = new ToolStripMenuItem(Lang.T("锁定位置", "Lock Position"));
             _miLockPosition.Click += delegate { RaiseEvent(ToggleLockPositionRequested); };
 
-            ToolStripMenuItem miExit = new ToolStripMenuItem("退出程序");
-            miExit.Click += delegate { RaiseEvent(ExitRequested); };
+            _miExit = new ToolStripMenuItem(Lang.T("退出程序", "Exit"));
+            _miExit.Click += delegate { RaiseEvent(ExitRequested); };
 
-            _contextMenu.Items.Add(miSettings);
+            _contextMenu.Items.Add(_miSettings);
             _contextMenu.Items.Add(_miLockSize);
             _contextMenu.Items.Add(_miLockPosition);
-            _contextMenu.Items.Add(miExit);
+            _contextMenu.Items.Add(_miExit);
 
             _contextMenu.Opened += delegate
             {
@@ -246,6 +248,15 @@ namespace QuickTile
                 UpdateCursorForPoint(PointToClient(GetPhysicalCursorPoint()));
                 Invalidate();
             }
+        }
+
+        public void RefreshLanguage()
+        {
+            _miSettings.Text = Lang.T("设置", "Settings");
+            _miLockSize.Text = Lang.T("锁定大小", "Lock Size");
+            _miLockPosition.Text = Lang.T("锁定位置", "Lock Position");
+            _miExit.Text = Lang.T("退出程序", "Exit");
+            Invalidate();
         }
 
         public void TriggerFlash()

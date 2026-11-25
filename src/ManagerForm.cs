@@ -81,6 +81,7 @@ namespace QuickTile
         private bool _recRWin;
         private int _swallowNextUpVk;
 
+        private Label _lblProfile;
         private ComboBox _cmbProfile;
         private Button _btnAddProfile;
         private Button _btnRenameProfile;
@@ -97,13 +98,18 @@ namespace QuickTile
         private GroupBox _grpAppearance;
         private GroupBox _grpAction;
 
+        private Label _lblName;
         private TextBox _txtLabel;
+        private Label _lblSize;
         private TrackBar _trkSize;
         private NumericUpDown _numSize;
+        private Label _lblPosX;
         private NumericUpDown _numPosX;
         private NumericUpDown _numPosY;
+        private Label _lblOpacity;
         private TrackBar _trkOpacity;
         private Label _lblOpacityVal;
+        private Label _lblColor;
         private FlowLayoutPanel _palettePanel;
         private Button _btnCustomColor;
         private PreviewPanel _previewPanel;
@@ -113,8 +119,12 @@ namespace QuickTile
         private Panel _hotkeyPanel;
         private Button _btnRecordHotkey;
         private Button _btnClearHotkey;
+        private Label _lblHotkeyType;
         private TextBox _txtHotkeyInput;
         private Button _btnApplyHotkeyText;
+        private Label _lblLeftMods;
+        private Label _lblRightMods;
+        private Label _lblKey;
         private CheckBox _chkLCtrl;
         private CheckBox _chkLAlt;
         private CheckBox _chkLShift;
@@ -130,10 +140,14 @@ namespace QuickTile
         private NumericUpDown _numAnchorX;
         private NumericUpDown _numAnchorY;
         private Button _btnPickScreen;
+        private Label _lblClick;
         private ComboBox _cmbClickType;
         private CheckBox _chkRestoreCursor;
+        private Label _lblHold;
         private NumericUpDown _numClickHoldMs;
 
+        private Label _lblLanguage;
+        private ComboBox _cmbLanguage;
         private Button _btnCloseSettings;
         private Button _btnExitApp;
 
@@ -149,7 +163,7 @@ namespace QuickTile
             SuspendLayout();
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            Text = "QuickTile 设置";
+            Text = Lang.T("QuickTile 设置", "QuickTile Settings");
             StartPosition = FormStartPosition.CenterScreen;
             ShowInTaskbar = true;
             ClientSize = new Size(820, 560);
@@ -214,6 +228,10 @@ namespace QuickTile
                 _chkTopMost.Checked = config.AlwaysOnTop;
                 _chkLockPosition.Checked = config.LockPosition;
                 _chkLockSize.Checked = config.LockSize;
+                if (_cmbLanguage != null && _cmbLanguage.Items.Count >= 2)
+                {
+                    _cmbLanguage.SelectedIndex = Lang.IsEnglish ? 1 : 0;
+                }
 
                 _cmbProfile.BeginUpdate();
                 try
@@ -538,9 +556,9 @@ namespace QuickTile
                 _recLShift, _recRShift,
                 _recLWin, _recRWin,
                 0);
-            if (string.Equals(held, "未设置", StringComparison.Ordinal))
+            if (string.Equals(held, Lang.T("未设置", "Not Set"), StringComparison.Ordinal))
             {
-                _btnRecordHotkey.Text = "按下快捷键...";
+                _btnRecordHotkey.Text = Lang.T("按下快捷键...", "Press keys...");
             }
             else
             {
@@ -593,15 +611,15 @@ namespace QuickTile
         private void InitializeControls()
         {
             // Top Bar: Profile CRUD + Lock/TopMost Flags
-            Label lblProfile = new Label();
-            lblProfile.Text = "方案:";
-            lblProfile.AutoSize = true;
-            lblProfile.Location = new Point(14, 17);
-            Controls.Add(lblProfile);
+            _lblProfile = new Label();
+            _lblProfile.Text = Lang.T("方案:", "Profile:");
+            _lblProfile.AutoSize = true;
+            _lblProfile.Location = new Point(14, 17);
+            Controls.Add(_lblProfile);
 
             _cmbProfile = new ComboBox();
-            _cmbProfile.Location = new Point(58, 13);
-            _cmbProfile.Size = new Size(150, 24);
+            _cmbProfile.Location = new Point(64, 13);
+            _cmbProfile.Size = new Size(146, 24);
             _cmbProfile.DropDownStyle = ComboBoxStyle.DropDownList;
             _cmbProfile.SelectedIndexChanged += delegate
             {
@@ -615,7 +633,7 @@ namespace QuickTile
             };
             Controls.Add(_cmbProfile);
 
-            _btnAddProfile = CreateToolbarButton("新建", 214, 12, 54, 28);
+            _btnAddProfile = CreateToolbarButton(Lang.T("新建", "New"), 216, 12, 54, 28);
             _btnAddProfile.Click += delegate
             {
                 StopHotkeyRecording();
@@ -623,11 +641,11 @@ namespace QuickTile
             };
             Controls.Add(_btnAddProfile);
 
-            _btnRenameProfile = CreateToolbarButton("重命名", 272, 12, 64, 28);
+            _btnRenameProfile = CreateToolbarButton(Lang.T("重命名", "Rename"), 274, 12, 66, 28);
             _btnRenameProfile.Click += OnRenameProfileClick;
             Controls.Add(_btnRenameProfile);
 
-            _btnDeleteProfile = CreateToolbarButton("删除", 340, 12, 54, 28);
+            _btnDeleteProfile = CreateToolbarButton(Lang.T("删除", "Delete"), 344, 12, 58, 28);
             _btnDeleteProfile.Click += delegate
             {
                 ProfileItem item = _cmbProfile.SelectedItem as ProfileItem;
@@ -640,9 +658,9 @@ namespace QuickTile
             Controls.Add(_btnDeleteProfile);
 
             _chkTopMost = new CheckBox();
-            _chkTopMost.Text = "始终置顶";
+            _chkTopMost.Text = Lang.T("始终置顶", "Always On Top");
             _chkTopMost.AutoSize = true;
-            _chkTopMost.Location = new Point(436, 16);
+            _chkTopMost.Location = new Point(420, 16);
             _chkTopMost.CheckedChanged += delegate
             {
                 if (_suppressUiEvents) return;
@@ -651,9 +669,9 @@ namespace QuickTile
             Controls.Add(_chkTopMost);
 
             _chkLockPosition = new CheckBox();
-            _chkLockPosition.Text = "锁定位置";
+            _chkLockPosition.Text = Lang.T("锁定位置", "Lock Position");
             _chkLockPosition.AutoSize = true;
-            _chkLockPosition.Location = new Point(536, 16);
+            _chkLockPosition.Location = new Point(538, 16);
             _chkLockPosition.CheckedChanged += delegate
             {
                 if (_suppressUiEvents) return;
@@ -662,9 +680,9 @@ namespace QuickTile
             Controls.Add(_chkLockPosition);
 
             _chkLockSize = new CheckBox();
-            _chkLockSize.Text = "锁定大小";
+            _chkLockSize.Text = Lang.T("锁定大小", "Lock Size");
             _chkLockSize.AutoSize = true;
-            _chkLockSize.Location = new Point(636, 16);
+            _chkLockSize.Location = new Point(664, 16);
             _chkLockSize.CheckedChanged += delegate
             {
                 if (_suppressUiEvents) return;
@@ -673,7 +691,7 @@ namespace QuickTile
             Controls.Add(_chkLockSize);
 
             // Left Pane: Tile Add/Delete + List
-            _btnAddTile = CreateToolbarButton("+ 新增方块", 14, 52, 132, 28);
+            _btnAddTile = CreateToolbarButton(Lang.T("+ 新增方块", "+ New Tile"), 14, 52, 132, 28);
             _btnAddTile.Click += delegate
             {
                 StopHotkeyRecording();
@@ -681,7 +699,7 @@ namespace QuickTile
             };
             Controls.Add(_btnAddTile);
 
-            _btnDeleteTile = CreateToolbarButton("删除方块", 154, 52, 132, 28);
+            _btnDeleteTile = CreateToolbarButton(Lang.T("删除方块", "Delete Tile"), 154, 52, 132, 28);
             _btnDeleteTile.Click += delegate
             {
                 if (!string.IsNullOrEmpty(_selectedTileId))
@@ -702,9 +720,9 @@ namespace QuickTile
             _listTiles.HideSelection = false;
             _listTiles.MultiSelect = false;
 
-            _listTiles.Columns.Add("名称", 78);
-            _listTiles.Columns.Add("触发内容", 130);
-            _listTiles.Columns.Add("大小", 54);
+            _listTiles.Columns.Add(Lang.T("名称", "Name"), 78);
+            _listTiles.Columns.Add(Lang.T("触发内容", "Action"), 130);
+            _listTiles.Columns.Add(Lang.T("大小", "Size"), 54);
             _listTiles.SelectedIndexChanged += delegate
             {
                 if (_suppressUiEvents) return;
@@ -725,8 +743,34 @@ namespace QuickTile
             BuildActionGroup();
 
             // Bottom Bar
+            _lblLanguage = new Label();
+            _lblLanguage.Text = Lang.T("语言:", "Language:");
+            _lblLanguage.AutoSize = true;
+            _lblLanguage.Location = new Point(14, 522);
+            _lblLanguage.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            Controls.Add(_lblLanguage);
+
+            _cmbLanguage = new ComboBox();
+            _cmbLanguage.Location = new Point(88, 518);
+            _cmbLanguage.Size = new Size(104, 24);
+            _cmbLanguage.DropDownStyle = ComboBoxStyle.DropDownList;
+            _cmbLanguage.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            _cmbLanguage.Items.Add(new KeyItem(0, "中文"));
+            _cmbLanguage.Items.Add(new KeyItem(1, "English"));
+            _cmbLanguage.SelectedIndex = Lang.IsEnglish ? 1 : 0;
+            _cmbLanguage.SelectedIndexChanged += delegate
+            {
+                if (_suppressUiEvents) return;
+                KeyItem item = _cmbLanguage.SelectedItem as KeyItem;
+                if (item != null)
+                {
+                    _manager.SetLanguage(item.VirtualKey == 1 ? "en" : "zh");
+                }
+            };
+            Controls.Add(_cmbLanguage);
+
             _btnCloseSettings = new Button();
-            _btnCloseSettings.Text = "关闭";
+            _btnCloseSettings.Text = Lang.T("关闭", "Close");
             _btnCloseSettings.Location = new Point(624, 516);
             _btnCloseSettings.Size = new Size(86, 30);
             _btnCloseSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -738,7 +782,7 @@ namespace QuickTile
             Controls.Add(_btnCloseSettings);
 
             _btnExitApp = new Button();
-            _btnExitApp.Text = "退出程序";
+            _btnExitApp.Text = Lang.T("退出程序", "Exit");
             _btnExitApp.Location = new Point(718, 516);
             _btnExitApp.Size = new Size(88, 30);
             _btnExitApp.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -752,17 +796,17 @@ namespace QuickTile
         private void BuildAppearanceGroup()
         {
             _grpAppearance = new GroupBox();
-            _grpAppearance.Text = "外观与位置";
+            _grpAppearance.Text = Lang.T("外观与位置", "Appearance && Position");
             _grpAppearance.Location = new Point(0, 0);
             _grpAppearance.Size = new Size(506, 212);
             _grpAppearance.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             _editorHost.Controls.Add(_grpAppearance);
 
-            Label lblName = new Label();
-            lblName.Text = "名称:";
-            lblName.AutoSize = true;
-            lblName.Location = new Point(12, 27);
-            _grpAppearance.Controls.Add(lblName);
+            _lblName = new Label();
+            _lblName.Text = Lang.T("名称:", "Name:");
+            _lblName.AutoSize = true;
+            _lblName.Location = new Point(12, 27);
+            _grpAppearance.Controls.Add(_lblName);
 
             _txtLabel = new TextBox();
             _txtLabel.Location = new Point(66, 24);
@@ -777,11 +821,11 @@ namespace QuickTile
             };
             _grpAppearance.Controls.Add(_txtLabel);
 
-            Label lblSize = new Label();
-            lblSize.Text = "大小:";
-            lblSize.AutoSize = true;
-            lblSize.Location = new Point(12, 63);
-            _grpAppearance.Controls.Add(lblSize);
+            _lblSize = new Label();
+            _lblSize.Text = Lang.T("大小:", "Size:");
+            _lblSize.AutoSize = true;
+            _lblSize.Location = new Point(12, 63);
+            _grpAppearance.Controls.Add(_lblSize);
 
             _trkSize = new TrackBar();
             _trkSize.Location = new Point(62, 58);
@@ -845,12 +889,12 @@ namespace QuickTile
             _previewPanel.Paint += OnPreviewPaint;
             _grpAppearance.Controls.Add(_previewPanel);
 
-            Label lblPosX = new Label();
-            lblPosX.Text = "位置 X:";
-            lblPosX.AutoSize = true;
-            lblPosX.Location = new Point(12, 125);
-            _grpAppearance.Controls.Add(lblPosX);
-            lblPosX.BringToFront();
+            _lblPosX = new Label();
+            _lblPosX.Text = Lang.T("位置 X:", "Pos X:");
+            _lblPosX.AutoSize = true;
+            _lblPosX.Location = new Point(12, 125);
+            _grpAppearance.Controls.Add(_lblPosX);
+            _lblPosX.BringToFront();
 
             _numPosX = new NumericUpDown();
             _numPosX.Location = new Point(68, 122);
@@ -887,12 +931,12 @@ namespace QuickTile
             _grpAppearance.Controls.Add(_numPosY);
             _numPosY.BringToFront();
 
-            Label lblOpacity = new Label();
-            lblOpacity.Text = "透明度:";
-            lblOpacity.AutoSize = true;
-            lblOpacity.Location = new Point(262, 125);
-            _grpAppearance.Controls.Add(lblOpacity);
-            lblOpacity.BringToFront();
+            _lblOpacity = new Label();
+            _lblOpacity.Text = Lang.T("透明度:", "Opacity:");
+            _lblOpacity.AutoSize = true;
+            _lblOpacity.Location = new Point(262, 125);
+            _grpAppearance.Controls.Add(_lblOpacity);
+            _lblOpacity.BringToFront();
 
             _trkOpacity = new TrackBar();
             _trkOpacity.Location = new Point(322, 120);
@@ -917,12 +961,12 @@ namespace QuickTile
             _grpAppearance.Controls.Add(_lblOpacityVal);
             _lblOpacityVal.BringToFront();
 
-            Label lblColor = new Label();
-            lblColor.Text = "配色:";
-            lblColor.AutoSize = true;
-            lblColor.Location = new Point(12, 174);
-            _grpAppearance.Controls.Add(lblColor);
-            lblColor.BringToFront();
+            _lblColor = new Label();
+            _lblColor.Text = Lang.T("配色:", "Theme:");
+            _lblColor.AutoSize = true;
+            _lblColor.Location = new Point(12, 174);
+            _grpAppearance.Controls.Add(_lblColor);
+            _lblColor.BringToFront();
 
             _palettePanel = new FlowLayoutPanel();
             _palettePanel.Location = new Point(68, 170);
@@ -935,7 +979,7 @@ namespace QuickTile
             _palettePanel.BringToFront();
 
             _btnCustomColor = new Button();
-            _btnCustomColor.Text = "自定义...";
+            _btnCustomColor.Text = Lang.T("自定义...", "Custom...");
             _btnCustomColor.Location = new Point(346, 169);
             _btnCustomColor.Size = new Size(86, 26);
             _btnCustomColor.Click += OnCustomColorClick;
@@ -979,21 +1023,21 @@ namespace QuickTile
         private void BuildActionGroup()
         {
             _grpAction = new GroupBox();
-            _grpAction.Text = "触发动作";
+            _grpAction.Text = Lang.T("触发动作", "Action");
             _grpAction.Location = new Point(0, 220);
             _grpAction.Size = new Size(506, 234);
             _grpAction.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             _editorHost.Controls.Add(_grpAction);
 
             _rbHotkey = new RadioButton();
-            _rbHotkey.Text = "快捷键";
+            _rbHotkey.Text = Lang.T("快捷键", "Hotkey");
             _rbHotkey.AutoSize = true;
             _rbHotkey.Location = new Point(14, 22);
             _rbHotkey.CheckedChanged += OnModeChanged;
             _grpAction.Controls.Add(_rbHotkey);
 
             _rbAnchor = new RadioButton();
-            _rbAnchor.Text = "锚定点击";
+            _rbAnchor.Text = Lang.T("锚定点击", "Anchor Click");
             _rbAnchor.AutoSize = true;
             _rbAnchor.Location = new Point(110, 22);
             _rbAnchor.CheckedChanged += OnModeChanged;
@@ -1012,7 +1056,7 @@ namespace QuickTile
             _grpAction.Controls.Add(_hotkeyPanel);
 
             _btnRecordHotkey = new Button();
-            _btnRecordHotkey.Text = "录制快捷键";
+            _btnRecordHotkey.Text = Lang.T("录制快捷键", "Record Hotkey");
             _btnRecordHotkey.Location = new Point(0, 2);
             _btnRecordHotkey.Size = new Size(210, 28);
             _btnRecordHotkey.UseVisualStyleBackColor = true;
@@ -1031,7 +1075,7 @@ namespace QuickTile
             _hotkeyPanel.Controls.Add(_btnRecordHotkey);
 
             _btnClearHotkey = new Button();
-            _btnClearHotkey.Text = "清空";
+            _btnClearHotkey.Text = Lang.T("清空", "Clear");
             _btnClearHotkey.Location = new Point(218, 2);
             _btnClearHotkey.Size = new Size(64, 28);
             _btnClearHotkey.Click += delegate
@@ -1053,11 +1097,11 @@ namespace QuickTile
             };
             _hotkeyPanel.Controls.Add(_btnClearHotkey);
 
-            Label lblType = new Label();
-            lblType.Text = "键入:";
-            lblType.AutoSize = true;
-            lblType.Location = new Point(0, 42);
-            _hotkeyPanel.Controls.Add(lblType);
+            _lblHotkeyType = new Label();
+            _lblHotkeyType.Text = Lang.T("键入:", "Input:");
+            _lblHotkeyType.AutoSize = true;
+            _lblHotkeyType.Location = new Point(0, 42);
+            _hotkeyPanel.Controls.Add(_lblHotkeyType);
 
             _txtHotkeyInput = new TextBox();
             _txtHotkeyInput.Location = new Point(52, 38);
@@ -1074,39 +1118,39 @@ namespace QuickTile
             _hotkeyPanel.Controls.Add(_txtHotkeyInput);
 
             _btnApplyHotkeyText = new Button();
-            _btnApplyHotkeyText.Text = "应用";
+            _btnApplyHotkeyText.Text = Lang.T("应用", "Apply");
             _btnApplyHotkeyText.Location = new Point(300, 37);
             _btnApplyHotkeyText.Size = new Size(64, 26);
             _btnApplyHotkeyText.Click += delegate { ApplyHotkeyTextExplicitly(); };
             _hotkeyPanel.Controls.Add(_btnApplyHotkeyText);
 
-            Label lblLeftMods = new Label();
-            lblLeftMods.Text = "左修饰:";
-            lblLeftMods.AutoSize = true;
-            lblLeftMods.Location = new Point(0, 78);
-            _hotkeyPanel.Controls.Add(lblLeftMods);
+            _lblLeftMods = new Label();
+            _lblLeftMods.Text = Lang.T("左修饰:", "Left:");
+            _lblLeftMods.AutoSize = true;
+            _lblLeftMods.Location = new Point(0, 78);
+            _hotkeyPanel.Controls.Add(_lblLeftMods);
 
             _chkLCtrl = CreateModCheckbox("LCtrl", 64, 76);
             _chkLAlt = CreateModCheckbox("LAlt", 138, 76);
             _chkLShift = CreateModCheckbox("LShift", 206, 76);
             _chkLWin = CreateModCheckbox("LWin", 282, 76);
 
-            Label lblRightMods = new Label();
-            lblRightMods.Text = "右修饰:";
-            lblRightMods.AutoSize = true;
-            lblRightMods.Location = new Point(0, 108);
-            _hotkeyPanel.Controls.Add(lblRightMods);
+            _lblRightMods = new Label();
+            _lblRightMods.Text = Lang.T("右修饰:", "Right:");
+            _lblRightMods.AutoSize = true;
+            _lblRightMods.Location = new Point(0, 108);
+            _hotkeyPanel.Controls.Add(_lblRightMods);
 
             _chkRCtrl = CreateModCheckbox("RCtrl", 64, 106);
             _chkRAlt = CreateModCheckbox("RAlt", 138, 106);
             _chkRShift = CreateModCheckbox("RShift", 206, 106);
             _chkRWin = CreateModCheckbox("RWin", 282, 106);
 
-            Label lblKey = new Label();
-            lblKey.Text = "主按键:";
-            lblKey.AutoSize = true;
-            lblKey.Location = new Point(0, 144);
-            _hotkeyPanel.Controls.Add(lblKey);
+            _lblKey = new Label();
+            _lblKey.Text = Lang.T("主按键:", "Key:");
+            _lblKey.AutoSize = true;
+            _lblKey.Location = new Point(0, 144);
+            _hotkeyPanel.Controls.Add(_lblKey);
 
             _cmbVirtualKey = new ComboBox();
             _cmbVirtualKey.Location = new Point(64, 141);
@@ -1183,25 +1227,23 @@ namespace QuickTile
             _anchorPanel.Controls.Add(_numAnchorY);
 
             _btnPickScreen = new Button();
-            _btnPickScreen.Text = "拾取位置";
+            _btnPickScreen.Text = Lang.T("拾取位置", "Pick Pos");
             _btnPickScreen.Location = new Point(252, 5);
             _btnPickScreen.Size = new Size(96, 28);
             _btnPickScreen.Click += OnPickScreenClick;
             _anchorPanel.Controls.Add(_btnPickScreen);
 
-            Label lblClick = new Label();
-            lblClick.Text = "点击类型:";
-            lblClick.AutoSize = true;
-            lblClick.Location = new Point(0, 52);
-            _anchorPanel.Controls.Add(lblClick);
+            _lblClick = new Label();
+            _lblClick.Text = Lang.T("点击类型:", "Click:");
+            _lblClick.AutoSize = true;
+            _lblClick.Location = new Point(0, 52);
+            _anchorPanel.Controls.Add(_lblClick);
 
             _cmbClickType = new ComboBox();
             _cmbClickType.Location = new Point(74, 48);
             _cmbClickType.Size = new Size(132, 24);
             _cmbClickType.DropDownStyle = ComboBoxStyle.DropDownList;
-            _cmbClickType.Items.Add(new KeyItem((int)MouseClickType.LeftClick, "左键单击"));
-            _cmbClickType.Items.Add(new KeyItem((int)MouseClickType.DoubleClick, "左键双击"));
-            _cmbClickType.Items.Add(new KeyItem((int)MouseClickType.RightClick, "右键单击"));
+            PopulateClickTypes();
             _cmbClickType.SelectedIndexChanged += delegate
             {
                 if (_suppressUiEvents || _working == null) return;
@@ -1216,7 +1258,7 @@ namespace QuickTile
             _anchorPanel.Controls.Add(_cmbClickType);
 
             _chkRestoreCursor = new CheckBox();
-            _chkRestoreCursor.Text = "光标归位";
+            _chkRestoreCursor.Text = Lang.T("光标归位", "Restore Cursor");
             _chkRestoreCursor.AutoSize = true;
             _chkRestoreCursor.Location = new Point(220, 50);
             _chkRestoreCursor.CheckedChanged += delegate
@@ -1227,11 +1269,11 @@ namespace QuickTile
             };
             _anchorPanel.Controls.Add(_chkRestoreCursor);
 
-            Label lblHold = new Label();
-            lblHold.Text = "点击时长:";
-            lblHold.AutoSize = true;
-            lblHold.Location = new Point(0, 96);
-            _anchorPanel.Controls.Add(lblHold);
+            _lblHold = new Label();
+            _lblHold.Text = Lang.T("点击时长:", "Hold:");
+            _lblHold.AutoSize = true;
+            _lblHold.Location = new Point(0, 96);
+            _anchorPanel.Controls.Add(_lblHold);
 
             _numClickHoldMs = new NumericUpDown();
             _numClickHoldMs.Location = new Point(74, 93);
@@ -1276,6 +1318,107 @@ namespace QuickTile
             }
         }
 
+        public void ApplyLanguage()
+        {
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            bool prevSuppress = _suppressUiEvents;
+            _suppressUiEvents = true;
+            try
+            {
+                Text = Lang.T("QuickTile 设置", "QuickTile Settings");
+                _lblProfile.Text = Lang.T("方案:", "Profile:");
+                _btnAddProfile.Text = Lang.T("新建", "New");
+                _btnRenameProfile.Text = Lang.T("重命名", "Rename");
+                _btnDeleteProfile.Text = Lang.T("删除", "Delete");
+                _chkTopMost.Text = Lang.T("始终置顶", "Always On Top");
+                _chkLockPosition.Text = Lang.T("锁定位置", "Lock Position");
+                _chkLockSize.Text = Lang.T("锁定大小", "Lock Size");
+
+                _btnAddTile.Text = Lang.T("+ 新增方块", "+ New Tile");
+                _btnDeleteTile.Text = Lang.T("删除方块", "Delete Tile");
+                if (_listTiles.Columns.Count >= 3)
+                {
+                    _listTiles.Columns[0].Text = Lang.T("名称", "Name");
+                    _listTiles.Columns[1].Text = Lang.T("触发内容", "Action");
+                    _listTiles.Columns[2].Text = Lang.T("大小", "Size");
+                }
+
+                _grpAppearance.Text = Lang.T("外观与位置", "Appearance && Position");
+                _lblName.Text = Lang.T("名称:", "Name:");
+                _lblSize.Text = Lang.T("大小:", "Size:");
+                _lblPosX.Text = Lang.T("位置 X:", "Pos X:");
+                _lblOpacity.Text = Lang.T("透明度:", "Opacity:");
+                _lblColor.Text = Lang.T("配色:", "Theme:");
+                _btnCustomColor.Text = Lang.T("自定义...", "Custom...");
+
+                _grpAction.Text = Lang.T("触发动作", "Action");
+                _rbHotkey.Text = Lang.T("快捷键", "Hotkey");
+                _rbAnchor.Text = Lang.T("锚定点击", "Anchor Click");
+
+                _btnRecordHotkey.Text = _isRecordingHotkey
+                    ? Lang.T("按下快捷键...", "Press keys...")
+                    : Lang.T("录制快捷键", "Record Hotkey");
+                _btnClearHotkey.Text = Lang.T("清空", "Clear");
+                _lblHotkeyType.Text = Lang.T("键入:", "Input:");
+                _btnApplyHotkeyText.Text = Lang.T("应用", "Apply");
+                _lblLeftMods.Text = Lang.T("左修饰:", "Left:");
+                _lblRightMods.Text = Lang.T("右修饰:", "Right:");
+                _lblKey.Text = Lang.T("主按键:", "Key:");
+
+                int savedVk = (_working != null) ? _working.VirtualKey : 0;
+                PopulateSupportedKeys();
+                for (int i = 0; i < _cmbVirtualKey.Items.Count; i++)
+                {
+                    KeyItem item = _cmbVirtualKey.Items[i] as KeyItem;
+                    if (item != null && item.VirtualKey == savedVk)
+                    {
+                        _cmbVirtualKey.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                _btnPickScreen.Text = Lang.T("拾取位置", "Pick Pos");
+                _lblClick.Text = Lang.T("点击类型:", "Click:");
+                int savedClick = (_working != null) ? (int)_working.ClickType : 0;
+                PopulateClickTypes();
+                for (int i = 0; i < _cmbClickType.Items.Count; i++)
+                {
+                    KeyItem item = _cmbClickType.Items[i] as KeyItem;
+                    if (item != null && item.VirtualKey == savedClick)
+                    {
+                        _cmbClickType.SelectedIndex = i;
+                        break;
+                    }
+                }
+                _chkRestoreCursor.Text = Lang.T("光标归位", "Restore Cursor");
+                _lblHold.Text = Lang.T("点击时长:", "Hold:");
+
+                _lblLanguage.Text = Lang.T("语言:", "Language:");
+                if (_cmbLanguage != null && _cmbLanguage.Items.Count >= 2)
+                {
+                    _cmbLanguage.SelectedIndex = Lang.IsEnglish ? 1 : 0;
+                }
+                _btnCloseSettings.Text = Lang.T("关闭", "Close");
+                _btnExitApp.Text = Lang.T("退出程序", "Exit");
+            }
+            finally
+            {
+                _suppressUiEvents = prevSuppress;
+            }
+        }
+
+        private void PopulateClickTypes()
+        {
+            _cmbClickType.Items.Clear();
+            _cmbClickType.Items.Add(new KeyItem((int)MouseClickType.LeftClick, Lang.T("左键单击", "Left Click")));
+            _cmbClickType.Items.Add(new KeyItem((int)MouseClickType.DoubleClick, Lang.T("左键双击", "Double Click")));
+            _cmbClickType.Items.Add(new KeyItem((int)MouseClickType.RightClick, Lang.T("右键单击", "Right Click")));
+        }
+
         private void PopulateSupportedKeys()
         {
             _cmbVirtualKey.Items.Clear();
@@ -1294,7 +1437,7 @@ namespace QuickTile
             }
             if (!hasZero)
             {
-                _cmbVirtualKey.Items.Insert(0, new KeyItem(0, "(无)"));
+                _cmbVirtualKey.Items.Insert(0, new KeyItem(0, Lang.T("(无)", "(None)")));
             }
         }
 
@@ -1382,7 +1525,7 @@ namespace QuickTile
         {
             if (_working == null)
             {
-                return "未设置";
+                return Lang.T("未设置", "Not Set");
             }
             return NativeMethods.FormatHotkey(
                 _working.ModLCtrl, _working.ModRCtrl,
@@ -1443,7 +1586,7 @@ namespace QuickTile
                 }
                 else
                 {
-                    _lblCurrentHotkey.Text = hasAny ? formatted : "未设置";
+                    _lblCurrentHotkey.Text = hasAny ? formatted : Lang.T("未设置", "Not Set");
                     _lblCurrentHotkey.ForeColor = SystemColors.ControlText;
                 }
                 _previewPanel.Invalidate();
@@ -1475,7 +1618,7 @@ namespace QuickTile
             _btnRecordHotkey.UseVisualStyleBackColor = false;
             _btnRecordHotkey.BackColor = Color.FromArgb(37, 99, 235);
             _btnRecordHotkey.ForeColor = Color.White;
-            _btnRecordHotkey.Text = "按下快捷键...";
+            _btnRecordHotkey.Text = Lang.T("按下快捷键...", "Press keys...");
             _btnRecordHotkey.Focus();
         }
 
@@ -1489,7 +1632,7 @@ namespace QuickTile
                 _btnRecordHotkey.BackColor = SystemColors.Control;
                 _btnRecordHotkey.ForeColor = SystemColors.ControlText;
                 _btnRecordHotkey.UseVisualStyleBackColor = true;
-                _btnRecordHotkey.Text = "录制快捷键";
+                _btnRecordHotkey.Text = Lang.T("录制快捷键", "Record Hotkey");
             }
         }
 
@@ -1548,7 +1691,7 @@ namespace QuickTile
             }
             else
             {
-                _lblCurrentHotkey.Text = "格式无效";
+                _lblCurrentHotkey.Text = Lang.T("格式无效", "Invalid");
                 _lblCurrentHotkey.ForeColor = Color.FromArgb(180, 70, 40);
             }
         }
@@ -1588,7 +1731,7 @@ namespace QuickTile
             }
             else
             {
-                _lblCurrentHotkey.Text = "格式无效";
+                _lblCurrentHotkey.Text = Lang.T("格式无效", "Invalid");
                 _lblCurrentHotkey.ForeColor = Color.FromArgb(180, 70, 40);
             }
         }
@@ -1668,7 +1811,7 @@ namespace QuickTile
                 dlg.SuspendLayout();
                 dlg.AutoScaleDimensions = new SizeF(96F, 96F);
                 dlg.AutoScaleMode = AutoScaleMode.Dpi;
-                dlg.Text = "重命名方案";
+                dlg.Text = Lang.T("重命名方案", "Rename Profile");
                 dlg.FormBorderStyle = FormBorderStyle.FixedDialog;
                 dlg.StartPosition = FormStartPosition.CenterParent;
                 dlg.MinimizeBox = false;
@@ -1678,7 +1821,7 @@ namespace QuickTile
                 dlg.Font = new Font("Microsoft YaHei UI", 9f, FontStyle.Regular);
 
                 Label lbl = new Label();
-                lbl.Text = "方案名称:";
+                lbl.Text = Lang.T("方案名称:", "Name:");
                 lbl.AutoSize = true;
                 lbl.Location = new Point(14, 18);
                 dlg.Controls.Add(lbl);
@@ -1691,14 +1834,14 @@ namespace QuickTile
                 dlg.Controls.Add(txt);
 
                 Button btnOk = new Button();
-                btnOk.Text = "确定";
+                btnOk.Text = Lang.T("确定", "OK");
                 btnOk.DialogResult = DialogResult.OK;
                 btnOk.Location = new Point(124, 62);
                 btnOk.Size = new Size(76, 28);
                 dlg.Controls.Add(btnOk);
 
                 Button btnCancel = new Button();
-                btnCancel.Text = "取消";
+                btnCancel.Text = Lang.T("取消", "Cancel");
                 btnCancel.DialogResult = DialogResult.Cancel;
                 btnCancel.Location = new Point(208, 62);
                 btnCancel.Size = new Size(76, 28);
