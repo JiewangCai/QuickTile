@@ -2,15 +2,28 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-An ultra-lightweight, zero-dependency Windows desktop floating macro tile utility. Keep customizable square shortcut tiles on top of your screen and trigger keyboard shortcuts or anchored screen clicks **without stealing focus** from the active window.
+An ultra-lightweight, zero-dependency Windows **on-screen custom button** utility. Primarily designed to solve the pain point of **tiny, hard-to-tap UI buttons and awkward keyboard shortcuts when using a tablet over Remote Desktop** — place customizable, always-on-top square buttons anywhere on your screen to trigger shortcuts or anchored screen clicks **without stealing focus** from the active window.
+
+## Screenshots
+
+![Floating Custom Buttons](docs/images/tiles-preview.png)
+
+<details>
+<summary>Settings UI (Hotkey & Anchor Click)</summary>
+
+![Settings - Hotkey](docs/images/settings-hotkey.png)
+![Settings - Anchor Click](docs/images/settings-anchor.png)
+
+</details>
 
 ## Features
 
-- **Focus-Safe Triggering**: Uses `WS_EX_NOACTIVATE` and `WM_MOUSEACTIVATE (MA_NOACTIVATE)` so clicking any tile sends its action without interrupting focus in your current app.
-- **Minimalist Floating UI**: Starts silently with your active tiles on screen. Right-click any tile (or click the system tray icon) to open **Settings**. Both the tile context menu and tray menu stay minimal with 4 items: `设置` (Settings), `锁定大小` (Lock Size), `锁定位置` (Lock Position), and `退出程序` (Exit).
-- **Multi-Profile Support**: Create, rename, switch, and delete tile profiles directly from the top bar in Settings. Automatically enforces at least 1 profile and at least 1 tile per profile.
-- **Free Positioning & Independent Locks (`28–320 px`)**:
-  - Drag tiles anywhere across single or multi-monitor setups (including negative coordinates);
+- **Built for Tablet & Remote Desktop Touch**: Enlarge hard-to-hit remote desktop buttons into comfortably sized on-screen square tiles (`28–320 px`) and place them wherever your thumb or stylus reaches easily.
+- **Focus-Safe Triggering**: Uses `WS_EX_NOACTIVATE` and `WM_MOUSEACTIVATE (MA_NOACTIVATE)` so tapping any button sends its action without interrupting focus in your current window.
+- **Minimalist Floating UI**: Starts silently with your active buttons on screen. Right-click any button (or click the system tray icon) to open **Settings**. Both the button context menu and tray menu stay minimal with 4 items: `设置` (Settings), `锁定大小` (Lock Size), `锁定位置` (Lock Position), and `退出程序` (Exit).
+- **Multi-Profile Support**: Create, rename, switch, and delete button profiles directly from the top bar in Settings. Automatically enforces at least 1 profile and at least 1 button per profile.
+- **Free Positioning & Independent Locks**:
+  - Drag buttons anywhere across single or multi-monitor setups (including negative coordinates);
   - Resize `1:1` from the bottom-right corner or fine-tune by `4 px` with the mouse wheel;
   - `PerMonitorV2` DPI-aware with `WM_DPICHANGED` guarding to prevent scaling jumps across mixed-DPI monitors;
   - Independent **Lock Position** and **Lock Size** toggles, plus **Always On Top**.
