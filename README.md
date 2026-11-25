@@ -52,6 +52,11 @@ The compiled executable is output to `dist\QuickTile.exe`.
 - **Default path**: `tiles.json` in the same directory as `QuickTile.exe` (can be overridden via the `QUICKTILE_CONFIG` environment variable).
 - Uses an atomic multi-profile JSON format and automatically migrates legacy single-list `Tiles` configs into the default profile (`默认方案`).
 
+## Contributors
+
+- **JiewangCai** — Project author & requirements
+- **Antigravity (Gemini)** — AI coding assistant
+
 ## License
 
 [MIT](LICENSE)

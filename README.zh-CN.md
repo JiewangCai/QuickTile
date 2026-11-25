@@ -52,6 +52,11 @@ powershell -ExecutionPolicy Bypass -File build.ps1
 - **默认路径**：程序同目录下的 `tiles.json`（可通过环境变量 `QUICKTILE_CONFIG` 指定自定义路径）。
 - 采用原子替换写入的多方案 JSON 结构，并向下兼容旧版单列表 `Tiles` 格式（加载时自动迁移至“默认方案”）。
 
+## 贡献者
+
+- **JiewangCai** — 项目作者与需求设计
+- **Antigravity (Gemini)** — AI 编程协作
+
 ## 开源协议
 
 [MIT](LICENSE)
