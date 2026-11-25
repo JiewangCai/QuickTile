@@ -1,0 +1,13 @@
+# Build artifacts & user configs
+dist/
+*.exe
+*.pdb
+*.tmp
+tiles.json
+
+# IDE / OS files
+.vs/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
